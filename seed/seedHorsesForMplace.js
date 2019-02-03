@@ -1,6 +1,6 @@
 
-var Marketplace = require("./models/marketplace");
-var Horse = require("./models/race").horseModel;
+var Marketplace = require("../models/marketplace");
+var Horse = require("../models/race").horseModel;
 
 
 function seedDBwithHorsesForMplace() {

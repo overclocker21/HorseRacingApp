@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
-var OpenLeague = require("./models/openLeague");
+var OpenLeague = require("../models/openLeague");
 //var PrivateLeague = require("./models/privateLeague");
-var Race = require("./models/race").raceModel;
-var Horse = require("./models/race").horseModel;
+var Race = require("../models/race").raceModel;
+var Horse = require("../models/race").horseModel;
 
 var data = [
     {

@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
-var User = require("./models/user");
-var Horse = require("./models/race").horseModel;
+var User = require("../models/user");
+var Horse = require("../models/race").horseModel;
 
 var data = [
     {

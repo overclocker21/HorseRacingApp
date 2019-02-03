@@ -6,10 +6,10 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
-let seedDBwithRaces = require("./seed");
-let seedDBwithHorses = require("./seedHorses");
-let seedDBwithHorsesForUser = require("./seedHorsesForUsers");
-let seedDBwithHorsesForMplace = require("./seedHorsesForMplace");
+let seedDBwithRaces = require("./seed/seed");
+let seedDBwithHorses = require("./seed/seedHorses");
+let seedDBwithHorsesForUser = require("./seed/seedHorsesForUsers");
+let seedDBwithHorsesForMplace = require("./seed/seedHorsesForMplace");
 const fetch = require("node-fetch");
 
 const app = express();
