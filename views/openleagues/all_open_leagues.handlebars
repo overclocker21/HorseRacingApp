@@ -1,0 +1,50 @@
+<main role="main">
+
+    <div class="container pt-3">
+        <div class="row">
+
+            <!-- Open Leagues -->
+
+            <div class="col-6 mx-auto">
+
+                <!-- Open Leagues -->
+                <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3">
+                    <div class="col p-0">
+                        <h5 class="mt-1 mb-0 ">All Open Leagues</h5>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/openleagues/add'">ADD
+                        </button></div>
+
+
+                </div>
+
+                <div class="list-group list-group-flush">
+
+                    {{#each open_leagues}}
+
+                    <a href="/races/{{_id}}" class="list-group-item list-group-item-action list-group-item-leagues">
+                        <div class="media">
+                            <img src="img/leagues_default_icon.png" class="mr-3" alt="...">
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{openTitle}}</strong>
+                                </div>
+                                <span class="badge badge-pill badge-leagues mt-3">Racing Competitions</span>
+                            </div>
+                        </div>
+                    </a>
+                    {{else}}
+                    <div class="list-group mt-1 shadow-sm rounded">
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
+                            <h5 class="text-center noleagues_v2 ">at the moment there are no public leagues</h5>
+                        </a>
+                    </div>
+                    {{/each}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

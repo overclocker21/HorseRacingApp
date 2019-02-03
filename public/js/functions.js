@@ -1,0 +1,5 @@
+function callAlert() {
+    alert("Hello!");
+};
+
+

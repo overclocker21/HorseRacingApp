@@ -1,0 +1,44 @@
+<main role="main" class="flex-shrink-0">
+
+    <div class="container">
+
+        <div class="row py-5">
+            {{#each foundUser.userRaces}}
+            <div class="col-xs-6 col-md-12 col-lg-6 mb-3">
+                <div class="card card-races green-1 shadow-sm">
+                    <h5 class="card-header">{{raceTitle}}</h5>
+                    <div class="card-body">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><span class="cr-title">start date</span></th>
+                                    <th scope="col"><span class="cr-title">END DATE</span></th>
+                                    <th scope="col"><span class="cr-title">HORSES</span></th>
+                                    <th scope="col"><span class="cr-title">PRIZE</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oct. 18</td>
+                                    <td>Nov. 3</td>
+                                    <td>5 / 12</td>
+                                    <td>$50,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="list-group mt-1 shadow-sm rounded mx-auto">
+                <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
+                    <h5 class="text-center noleagues_v2 ">You are not enrolled in any race currently</h5>
+                </a>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+
+</main>

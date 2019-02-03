@@ -1,0 +1,181 @@
+<main role="main">
+    <div class="container px-0">
+
+        <!-- Carousel -->
+
+        <div id="carouselExampleControls" class="carousel slide shadow-sm" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="img/carousel_1.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="img/carousel_2.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="img/carousel_3.jpg" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container pt-3">
+        <h3 class="text-center colheader ">Leagues</h3>
+        <div class="row">
+
+            <!-- Open Leagues -->
+
+            <div class="col-12 col-md-6 ">
+
+                <!-- Open Leagues -->
+                <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3">
+                    <div class="col p-0">
+                        <h5 class="mt-1 mb-0 ">Open</h5>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/openleagues/add'">ADD
+                        </button></div>
+
+
+                </div>
+
+                <div class="list-group list-group-flush">
+
+                    {{#each open_leagues}}
+
+                    <a href="/openraces/{{_id}}" class="list-group-item list-group-item-action list-group-item-leagues">
+                        <div class="media">
+                            <img src="img/leagues_default_icon.png" class="mr-3" alt="...">
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{openTitle}}</strong>
+                                </div>
+                                <span class="badge badge-pill badge-leagues mt-3">Racing Competitions</span>
+                            </div>
+                        </div>
+                    </a>
+                    {{else}}
+                    <div class="list-group mt-1 shadow-sm rounded">
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
+                            <h5 class="text-center noleagues_v2 ">at the moment there are no public leagues</h5>
+                        </a>
+                    </div>
+                    {{/each}}
+
+                </div>
+                <h6 class="d-block text-center mb-3 mt-1">
+                    <a href="/allopenleagues">Show all</a>
+                </h6>
+            </div>
+
+
+            <!-- Private Leagues -->
+
+            <div class="col-12 col-md-6">
+                <!-- Private Leagues -->
+                <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3">
+                    <div class="col p-0">
+                        <h5 class="mt-1 mb-0 ">Private</h5>
+                    </div>
+                    <div class="col"><button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/privateleagues/add'">ADD
+                        </button></div>
+                </div>
+
+                <div class="list-group list-group-flush">
+
+                    {{#each private_leagues}}
+                    <a href="/privateraces/{{_id}}" class="list-group-item list-group-item-action list-group-item-leagues">
+                        <div class="media">
+                            <img src="img/leagues_default_icon.png" class="mr-3" alt="...">
+                            <div class="media-body">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <strong class="text-gray-dark">{{privateTitle}}</strong>
+                                </div>
+                                <span class="badge badge-pill badge-leagues mt-3">Racing Competitions</span>
+                            </div>
+                        </div>
+                    </a>
+                    {{else}}
+                    <div class="list-group mt-1 shadow-sm rounded">
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
+                            <h5 class="text-center noleagues_v2 ">at the moment there are no private leagues</h5>
+                        </a>
+                    </div>
+                    {{/each}}
+
+                </div>
+
+                <h6 class="d-block text-center mb-3 mt-1">
+                    <a href="/allprivateleagues">Show all</a>
+                </h6>
+
+            </div>
+        </div>
+
+        <!-- News -->
+
+        <h3 class="text-center colheader">News</h3>
+
+        <div class="row mt-2">
+
+            <div class="col-md-4">
+                <div class="card mb-4 green-1 shadow-sm">
+                    <img class="card-img-top" src="img/1.png" alt="Card image cap" height="242" width="142">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Jockey Victor Espinoza eyeing comeback in mid-February</h5>
+                        <p class="card-text">Espinoza exercised two horses at Santa Anita on Sunday. He has been
+                            sidelined since breaking a vertebra in his neck...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#">Read more <i class="fas fa-arrow-right"></i></a>
+                            <small class="text-white-50">26 Dec 2018</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card mb-4 green-1 shadow-sm">
+                    <img class="card-img-top" src="img/horse_racing-1.jpg" alt="Card image cap" height="242" width="142">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Kentucky Derby purse raised to $3 million; 1st boost in 14 years</h5>
+                        <p class="card-text">The Kentucky Derby's purse will be raised to $3 million this May, an
+                            increase of $1 million and the first boost in 14 years.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#">Read more <i class="fas fa-arrow-right"></i></a>
+                            <small class="text-white-50">26 Dec 2018</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card mb-4 green-1 shadow-sm">
+                    <img class="card-img-top" src="img/2.png" alt="Card image cap" height="242" width="142">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Time to believe in Unlikely Story</h5>
+                        <p class="card-text">From early on, I've had a pretty decent opinion of Unlikely Story and I
+                            certainly don't think we've seen him reach his ceiling yet...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#">Read more <i class="fas fa-arrow-right"></i></a>
+                            <small class="text-white-50">26 Dec 2018</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h5 class="text-center"> <a href="#">View all</a></h5>
+
+    </div>
+
+</main>
