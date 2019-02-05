@@ -87,12 +87,6 @@ app.get('/', (req, res) => {
     res.render('login', { layout: 'other' });
 });
 
-const user = new User({
-    name: "John Wick",
-    uid: "773160929731148"
-});
-user.save();
-
 //fb login functionality
 app.post('/login-bla', async (req, res) => {
     const { accessToken, userID } = req.body;
