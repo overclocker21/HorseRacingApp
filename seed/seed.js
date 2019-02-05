@@ -5,14 +5,14 @@ var Race = require("../models/race").raceModel;
 
 var data = [
     {
-        raceTitle: "Cracker"
+        raceTitle: "The Big Hurdle"
     }
 ];
 
 function seedDB() {
 
     data.forEach(function (seed) {
-        OpenLeague.findOne({ "openTitle": "Testing 2" }, (err, foundLeague) => {
+        OpenLeague.findOne({ "openTitle": "First Open" }, (err, foundLeague) => {
             if (err) {
                 console.log(err);
             } else {

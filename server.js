@@ -24,7 +24,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
     .catch(err => console.log(err));
 
 //Seed db with races or horses
-//seedDBwithRaces();
+seedDBwithRaces();
 //seedDBwithHorses();
 //seedDBwithHorsesForUser(); //won't need this whe nmarketplace is available
 //seedDBwithHorsesForMplace();
