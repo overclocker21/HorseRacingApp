@@ -24,7 +24,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
     .catch(err => console.log(err));
 
 //Seed db with races or horses
-seedDBwithRaces();
+//seedDBwithRaces();
 //seedDBwithHorses();
 //seedDBwithHorsesForUser(); //won't need this whe nmarketplace is available
 //seedDBwithHorsesForMplace();
@@ -86,6 +86,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.render('login', { layout: 'other' });
 });
+
+const user = new User({
+    name: "John Wick",
+    uid: "773160929731148"
+});
+await user.save();
 
 //fb login functionality
 app.post('/login-bla', async (req, res) => {
