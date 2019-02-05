@@ -455,7 +455,7 @@ app.get('/allprivateleagues', (req, res) => {
 
     privateLeague.find({})
         .then(private_leagues => {
-            res.render("privateLeagues/all_private_leagues", {
+            res.render("privateleagues/all_private_leagues", {
                 private_leagues: private_leagues
             });
         });
