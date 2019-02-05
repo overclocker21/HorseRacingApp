@@ -91,7 +91,7 @@ const user = new User({
     name: "John Wick",
     uid: "773160929731148"
 });
-await user.save();
+user.save();
 
 //fb login functionality
 app.post('/login-bla', async (req, res) => {
