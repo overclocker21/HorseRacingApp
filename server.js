@@ -27,7 +27,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
 //seedDBwithRaces();
 //seedDBwithHorses();
 //seedDBwithHorsesForUser(); //won't need this whe nmarketplace is available
-//seedDBwithHorsesForMplace();
+seedDBwithHorsesForMplace();
 
 //Load OpenLeague model
 const openLeague = require('./models/openLeague');
