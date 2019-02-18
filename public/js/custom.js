@@ -14,6 +14,7 @@ function testApi() {
             res.json().then(function (data) {
                 console.log("Redirecting");
                 console.log(FB.getAccessToken());
+                //redirecting based on the response from /login-bla api, in our case /lobby
                 window.location = data.redirect;
             });
         });
@@ -51,7 +52,7 @@ function logout() {
             });
         }
 
-    });
+    }, true);
 };
 
 

@@ -26,12 +26,12 @@
             });
 
             //enable route protection when production ready
-            //FB.getLoginStatus(function (response) {
+            FB.getLoginStatus(function (response) {
 
-            //    if (response.status === "unknown") {
-            //        document.location.href = "http://localhost:5000";
-            //    }
-            //});
+                if (response.status === "unknown") {
+                    document.location.href = "http://localhost:5000";
+                }
+            });
 
         };
 
