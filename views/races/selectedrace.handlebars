@@ -2,7 +2,7 @@
 
     <div class="container">
 
-        <h3 class="text-center mt-3 page-title"><i class="fas fa-flag-checkered"></i> The Amazing Hubble</h3>
+        <h3 class="text-center mt-3 page-title"><i class="fas fa-flag-checkered"></i> {{race.title}}</h3>
         <div class="row mt-3 pb-5">
             <div class="col-xs-12 col-md-12 col-lg-12 mb-3">
                 <div class="card card-races green-1 shadow-sm">
@@ -21,14 +21,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each foundRace.horsesInRace}}
+                                {{#each race.horses}}
                                 <tr>
                                     <td class="pl-2">1</td>
-                                    <td>{{horseName}}</td>
-                                    <td>3</td>
+                                    <td>{{name}}</td>
                                     <td>0</td>
                                     <td>0</td>
-                                    <td class="text-right pr-2">$588</td>
+                                    <td>0</td>
+                                    <td class="text-right pr-2">-</td>
                                 </tr>
                                 {{/each}}
                             </tbody>

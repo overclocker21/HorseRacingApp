@@ -2,30 +2,35 @@
 
     <div class="container">
 
-        <div class="row py-5">
-            {{#each foundUser.userRaces}}
-            <div class="col-xs-6 col-md-12 col-lg-6 mb-3">
+        <!--<h3 class="text-center mt-3 mb-0 page-title">Races of {{ foundLeague.openTitle }} league</h3>-->
+        <h3 class="text-center mt-3 mb-0 page-title">Enrolled races:</h3>
+        <div class="row pb-5">
+
+            {{#each enrolled_races}}
+
+            <div class="col-xs-6 col-md-12 col-lg-6 mb-3 mt-3">
                 <div class="card card-races green-1 shadow-sm">
-                    <h5 class="card-header">{{raceTitle}}</h5>
+                    <h5 class="card-header"><i class="fas fa-flag-checkered"></i> <a href="/selectedrace/{{id}}">
+                            {{ title }}</a></h5>
                     <div class="card-body">
                         <table class="table table-sm mb-0">
                             <thead>
                                 <tr>
                                     <th scope="col"><span class="cr-title">start date</span></th>
-                                    <th scope="col"><span class="cr-title">END DATE</span></th>
                                     <th scope="col"><span class="cr-title">HORSES</span></th>
                                     <th scope="col"><span class="cr-title">PRIZE</span></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Oct. 18</td>
-                                    <td>Nov. 3</td>
+                                    <td>{{formatDateInUI date}}</td>
                                     <td>5 / 12</td>
                                     <td>$50,000</td>
                                 </tr>
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn btn-sm btn-success float-right">Enrolled</button>
+
 
                     </div>
                 </div>
@@ -37,7 +42,6 @@
                 </a>
             </div>
             {{/each}}
-
         </div>
     </div>
 

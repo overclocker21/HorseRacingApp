@@ -12,35 +12,16 @@ const fetch = require("node-fetch");
 const app = express();
 const keys = require('./config/keys');
 
-// Map global promise - get rid of warning
-mongoose.Promise = global.Promise;
-
-//connect to mongoose
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true })
-    .then(() => console.log('MongoDB connected...'))
-    .catch(err => console.log(err));
-
-//Load OpenLeague model
-const openLeague = require('./models/openLeague');
-
-//Load PrivateLeague model
-const privateLeague = require('./models/privateLeague');
-
-//Load User model
-const User = require('./models/user');
-
-//Load Race model
-const Race = require('./models/race').raceModel;
-
-//Load Horse model
-const Horse = require('./models/race').horseModel;
-
-//Load MArketplace model
-const MArketplace = require('./models/marketplace');
+let filterEnrolledRaces = require("./util/helpers");
 
 //Handlebars middleware
 app.engine('handlebars', exphbs({
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    helpers: {
+        formatDateInUI: function (date) { 
+            return dateFormat(date, "mmmm dS, yyyy");
+        }
+    }
 }));
 app.set("view engine", "handlebars");
 
@@ -70,6 +51,8 @@ app.use(function (req, res, next) {
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 //ROUTES:
 
@@ -153,7 +136,7 @@ app.get('/lobby', async (req, res) => {
                         reducedOpen[i] = open[i];
                 }
             }
-
+            
             res.render("lobby", {
                 private_leagues: reducedPrivate,
                 open_leagues: reducedOpen
@@ -167,20 +150,35 @@ app.get('/lobby', async (req, res) => {
 });
 
 //Go to selected race
-app.get('/selectedrace/:id', (req, res) => {
+app.get('/selectedrace/:id', async (req, res) => {
 
-    //Storing Race Id in global variable
-    app.locals.selectedRaceId = req.params.id;
-    let userId = req.app.locals.uid;
-    console.log("User Id: " + userId);
+    let sessionId = req.app.locals.sessionid;
 
+        //get selected race id is and store in locals
+        app.locals.selected_race = req.params.id;
 
-    Race.findById(req.params.id).exec(function (err, foundRace) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("races/selectedrace", { foundRace: foundRace });
-        }
+    await fetch('http://204.48.25.72:8080/functions/races/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        response.json().then(function (data) {
+
+            let selected = data.races.filter(function (el) {
+                return el.id === req.params.id;
+              });
+
+             console.log(selected);
+              
+
+            res.render("races/selectedrace", { race: selected[0] });
+            
+        }).catch((error) => {
+            console.log(error);
+        });
     });
 
 });
@@ -210,25 +208,6 @@ app.get('/marketplace', async (req, res) => {
 
 });
 
-//Go to enrolled race and view stats
-app.get('/enrolledracestats/:id', (req, res) => {
-
-    //Storing Race Id in global variable
-    app.locals.selectedRaceId = req.params.id;
-    let userId = req.app.locals.uid;
-    console.log("User Id: " + userId);
-
-
-    Race.findById(req.params.id).exec(function (err, foundRace) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("races/enrolledrace", { foundRace: foundRace });
-        }
-    });
-
-});
-
 //Go to Mission Statement
 app.get('/mission', (req, res) => {
 
@@ -237,18 +216,25 @@ app.get('/mission', (req, res) => {
 });
 
 //Go to My Account
-app.get('/account', (req, res) => {
+app.get('/account', async (req, res) => {
 
-    let userId = req.app.locals.uid;
+    let sessionId = req.app.locals.sessionid;
 
-    User.findOne({ "uid": userId }, (err, foundUser) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(foundUser.userRaces.length);
-
-            res.render("myaccount", { foundUser: foundUser });
-        }
+    await fetch('http://204.48.25.72:8080/functions/me/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        response.json().then(function (data) {
+            
+            res.render("myaccount", { foundUser: data.user });
+            
+        }).catch((error) => {
+            console.log(error);
+        });
     });
 });
 
@@ -277,16 +263,25 @@ app.get('/stables', async (req, res) => {
 });
 
 //Go to join race and add a horse
-app.get('/addhorse', (req, res) => {
+app.get('/addhorse', async (req, res) => {
 
-    let userId = req.app.locals.uid;
+    let sessionId = req.app.locals.sessionid;
 
-    User.findOne({ "uid": userId }, (err, foundUser) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("horses/addhorse", { foundUser: foundUser });
-        }
+    await fetch('http://204.48.25.72:8080/functions/me/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        response.json().then(function (data) {
+            
+            res.render("horses/addhorse", { horses: data.user.horses });
+            
+        }).catch((error) => {
+            console.log(error);
+        });
     });
 
 });
@@ -333,7 +328,7 @@ app.post('/buyhorse/:id', async (req, res) => {
             
             if (data.reason){
                 req.flash('error_msg', 'The horse you are trying to buy is already in your stable!');
-                res.redirect('/stables');
+                res.redirect('/marketplace');
             } else {
                 req.flash('success_msg', 'Horse bought!');
                 res.redirect('/stables');
@@ -346,63 +341,93 @@ app.post('/buyhorse/:id', async (req, res) => {
 });
 
 //add selected horse to the race
-app.post('/addhorse/:name/add', (req, res) => {
+app.post('/addbet/:id', async (req, res) => {
 
-    let userId = req.app.locals.uid;
-    let nameOfHorse = req.params.name;
-    let raceId = req.app.locals.selectedRaceId;
+    let horseId = req.params.id;
+    console.log("Horse ID:" + horseId);
+    
+    let leagueId = req.app.locals.selected_league;
+    console.log("League ID: " + leagueId);
 
-    Race.findById(raceId).exec(function (err, foundRace) {
-        if (err) {
-            console.log(err);
-        } else {
-            Horse.findOne({ "horseName": nameOfHorse }, (err, foundHorse) => {
-                if (err) {
-                    console.log(err);
-                } else {
-                    foundRace.horsesInRace.push(foundHorse);
-                    foundRace.save();
-                    console.log("Added horse to the race");
+    let raceId = req.app.locals.selected_race;
+    console.log("Race ID: " + raceId);
 
-                    User.findOne({ "uid": userId }, (err, foundUser) => {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            foundUser.userRaces.push(foundRace);
-                            foundUser.save();
+    let sessionId = req.app.locals.sessionid;
 
-                            console.log("Added race into user object");
-                            console.log("Redirecting");
-
-                        }
-                    });
-                }
-            });
-        }
-        req.flash('success_msg', 'Joined to the race with your horse!');
-        res.redirect("/myraces");
+    await fetch('http://204.48.25.72:8080/functions/bets/add', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({"horseId":horseId,
+    "leagueId":leagueId,"raceId":raceId})
+    }).then(response => {
+        response.json().then(function (data) {
+            console.log(data);
+            
+            if (data.reason === 'tooLate'){
+                req.flash('error_msg', 'The race ended already!');
+                res.redirect('/addhorse');
+            } else {
+                req.flash('success_msg', 'You just made a bet!');
+                res.redirect('/lobby');
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
     });
 });
 
 //Go to My Races route
-app.get('/myraces', (req, res) => {
+app.get('/myraces', async (req, res) => {
 
-    let userId = req.app.locals.uid;
+    let sessionId = req.app.locals.sessionid;
 
-    User.findOne({ "uid": userId }, (err, foundUser) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("myraces", { foundUser: foundUser });
-        }
+    await fetch('http://204.48.25.72:8080/functions/me/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    }).then(response => {
+        response.json().then(async (me) => { return me })
+        .then(async(me) => {
+            await fetch('http://204.48.25.72:8080/functions/races/fetch', {
+                method: "POST",
+                headers: {
+                    "Authorization": sessionId,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+            }).then(response => {
+                response.json().then(function (all_races) {
+
+                    let enrolled_races = filterEnrolledRaces(all_races.races, me.user.bets);
+                    console.log(enrolled_races);
+                                
+                    res.render("myraces", { enrolled_races: enrolled_races });
+                    
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     });
 
 });
 
 //get all races for any league
-app.get('/races', async (req, res) => {
+app.get('/races/:id', async (req, res) => {
 
     let sessionId = req.app.locals.sessionid;
+    
+    //get selected league id is and store in locals
+    app.locals.selected_league = req.params.id;
 
     await fetch('http://204.48.25.72:8080/functions/races/fetch', {
         method: "POST",
@@ -413,89 +438,12 @@ app.get('/races', async (req, res) => {
         body: JSON.stringify({})
     }).then(response => {
         response.json().then(function (data) {
-
+            
             res.render("races/all_races", { races: data.races });
             
         }).catch((error) => {
             console.log(error);
         });
-    });
-
-});
-
-
-//Go to races of open league
-app.get('/openraces/:id', (req, res) => {
-
-    let userId = req.app.locals.uid;
-
-    User.findOne({ "uid": userId }, (err, foundUser) => {
-        if (err) {
-            console.log(err);
-        } else {
-            openLeague.findById(req.params.id).exec(function (err, foundLeague) {
-                if (err) {
-                    console.log(err);
-                } else {
-
-                    let available = new Array(foundLeague.races)[0];
-
-                    let enrolled = new Array(foundUser.userRaces)[0];
-
-                    let enrolledBelongToLeague = [];
-
-                    for (var i = 0; i < available.length; i++) {
-                        for (var j = 0; j < enrolled.length; j++) {
-                            if (available[i].raceTitle === enrolled[j].raceTitle) {
-                                enrolledBelongToLeague.push(available[i]);
-                            }
-                        }
-                    }
-
-                    let foundEnrolled = false;
-
-                    for (var i = 0; i < enrolled.length; i++) {
-                        for (var j = 0; j < available.length; j++) {
-                            if (enrolled[i].raceTitle === available[j].raceTitle) {
-                                foundEnrolled = true;
-                            }
-                        }
-                    }
-
-                    let returned = JSON.parse(JSON.stringify(foundLeague));
-
-                    if (returned.races.length == 0) {
-                        res.render("races/races", { available: available });
-                    } else {
-
-                        if (foundEnrolled) {
-                            for (var i = 0; i < enrolledBelongToLeague.length; i++) {
-                                for (var j = 0; j < available.length; j++) {
-                                    if (enrolledBelongToLeague[i].raceTitle === available[j].raceTitle) {
-                                        available = available.slice(0, j).concat(available.slice(j + 1, available.length));
-                                    }
-                                }
-                            }
-                            res.render("races/races", { available: available, enrolled: enrolledBelongToLeague });
-                        } else {
-                            res.render("races/races", { available: available });
-                        }
-                    }
-                }
-            });
-        }
-    });
-});
-
-//Go to races of private league
-app.get('/privateraces/:id', (req, res) => {
-
-    privateLeague.findById(req.params.id).exec(function (err, foundLeague) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("races/races", { foundLeague: foundLeague });
-        }
     });
 
 });
