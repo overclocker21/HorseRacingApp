@@ -8,11 +8,11 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const dateFormat = require('dateformat');
 const fetch = require("node-fetch");
+let filterEnrolledRaces = require("./util/helpers");
 
 const app = express();
-const keys = require('./config/keys');
 
-let filterEnrolledRaces = require("./util/helpers");
+//Adding middleware to express
 
 //Handlebars middleware
 app.engine('handlebars', exphbs({
@@ -171,10 +171,9 @@ app.get('/selectedrace/:id', async (req, res) => {
                 return el.id === req.params.id;
               });
 
-             console.log(selected);
-              
+            let enrolled = true;                                
 
-            res.render("races/selectedrace", { race: selected[0] });
+            res.render("races/selectedrace", { race: selected[0], enrolled: enrolled });
             
         }).catch((error) => {
             console.log(error);
@@ -404,11 +403,10 @@ app.get('/myraces', async (req, res) => {
             }).then(response => {
                 response.json().then(function (all_races) {
 
-                    let enrolled_races = filterEnrolledRaces(all_races.races, me.user.bets);
-                    console.log(enrolled_races);
-                                
+                    let enrolled_races = filterEnrolledRaces(all_races.races, me.user.bets);                            
+
                     res.render("myraces", { enrolled_races: enrolled_races });
-                    
+
                 }).catch((error) => {
                     console.log(error);
                 });
@@ -429,17 +427,19 @@ app.get('/races/:id', async (req, res) => {
     //get selected league id is and store in locals
     app.locals.selected_league = req.params.id;
 
-    await fetch('http://204.48.25.72:8080/functions/races/fetch', {
+    let league_id = app.locals.selected_league;
+
+    await fetch('http://204.48.25.72:8080/functions/leagues/league/fetch', {
         method: "POST",
         headers: {
             "Authorization": sessionId,
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({"leagueId":league_id})
     }).then(response => {
         response.json().then(function (data) {
             
-            res.render("races/all_races", { races: data.races });
+            res.render("races/all_races", { races: data.league.races });
             
         }).catch((error) => {
             console.log(error);
@@ -544,6 +544,9 @@ app.post('/openleagues', async (req, res) => {
 
             if (data.reason === "invalidDateRange"){
                 req.flash('error_msg', 'Please enter valid date range');
+                res.redirect('/openleagues/add');
+            } else if (data.reason === "startDateIsTooEarly"){
+                req.flash('error_msg', 'Please give at least 3 days in advance for the start date so other players can join');
                 res.redirect('/openleagues/add');
             } else {
                 req.flash('success_msg', 'Open League Created!');

@@ -23,7 +23,7 @@
                             <tbody>
                                 {{#each race.horses}}
                                 <tr>
-                                    <td class="pl-2">1</td>
+                                    <td class="pl-2">?</td>
                                     <td>{{name}}</td>
                                     <td>0</td>
                                     <td>0</td>
@@ -36,8 +36,14 @@
                     </div>
                 </div>
 
-                <p class="text-center mt-2"><button type="button" class="btn btn btn-warning " onclick="window.location.href='/addhorse'">JOIN
+                {{#if enrolled}}
+                    <!--We dont want to show the button if we are enrolled already-->
+                {{else}}
+                    <p class="text-center mt-2"><button type="button" class="btn btn btn-warning " onclick="window.location.href='/addhorse'">JOIN
                         THE RACE</button></p>
+                {{/if}}
+
+                
 
             </div>
         </div>
