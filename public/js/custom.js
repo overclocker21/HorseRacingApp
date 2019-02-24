@@ -47,7 +47,7 @@ function logout() {
         const { authResponse: { accessToken, userID } } = response;
         if (response.status === 'connected') {
             FB.logout(function (response) {
-                document.location.href = "http://localhost:5000";
+                document.location.href = "fhrstables.com";
                 console.log("Logged out...");
             });
         }
