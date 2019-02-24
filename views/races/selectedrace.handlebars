@@ -37,13 +37,11 @@
                 </div>
 
                 {{#if enrolled}}
-                    <!--We dont want to show the button if we are enrolled already-->
+                    <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">ENROLLED </button></p>
                 {{else}}
-                    <p class="text-center mt-2"><button type="button" class="btn btn btn-warning " onclick="window.location.href='/addhorse'">JOIN
+                    <p class="text-center mt-2"><button type="button" class="btn btn btn-warning " onclick="window.location.href='/addhorse/{{race.id}}'">JOIN
                         THE RACE</button></p>
                 {{/if}}
-
-                
 
             </div>
         </div>

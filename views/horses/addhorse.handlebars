@@ -42,11 +42,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                        
+                        {{#if bought}}
+                            <form action="/addbet/{{_id}}" method="post">
+                                <input type="submit" name="upvote" value="Add" class="btn btn btn-sm btn-warning float-right" />
+                            </form>
+                        {{else}}
+                            <form action="/marketplace" method="get">
+                                <input type="submit" name="upvote" value="Buy & Add" class="btn btn btn-sm btn-warning float-right" />
+                            </form>
+                        {{/if}}
 
-                        <form action="/addbet/{{_id}}" method="post">
-                            <input type="submit" name="upvote" value="Add" class="btn btn btn-sm btn-warning float-right" />
-                        </form>
-                        <!-- <button type="submit" class="btn btn btn-sm btn-warning float-right">ADD</button> -->
                     </div>
                 </div>
             </div>

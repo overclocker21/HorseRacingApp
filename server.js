@@ -2,7 +2,6 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const path = require('path');
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
@@ -66,7 +65,6 @@ app.post('/login-bla', async (req, res) => {
     const { accessToken, userID } = req.body;
     console.log("TOKEN:" + accessToken);
 
-    console.log("Storing user's id:");
     app.locals.uid = userID;
 
     //getting access token, storing userID and SessionId in the locals and redirecting to lobby
@@ -80,8 +78,9 @@ app.post('/login-bla', async (req, res) => {
     }).then(response => {
         response.json().then(function (data) {
 
-            console.log("Storing session id:");
+            console.log("Storing session id and user");
             app.locals.sessionid = data.session;
+            app.locals.user = data.user;
             res.send({ redirect: '/lobby' });     
         });
     });
@@ -153,9 +152,10 @@ app.get('/lobby', async (req, res) => {
 app.get('/selectedrace/:id', async (req, res) => {
 
     let sessionId = req.app.locals.sessionid;
+    let userObject = req.app.locals.user;
 
-        //get selected race id is and store in locals
-        app.locals.selected_race = req.params.id;
+    //get selected race id is and store in locals
+    app.locals.selected_race = req.params.id;
 
     await fetch('http://204.48.25.72:8080/functions/races/fetch', {
         method: "POST",
@@ -171,7 +171,16 @@ app.get('/selectedrace/:id', async (req, res) => {
                 return el.id === req.params.id;
               });
 
-            let enrolled = true;                                
+            //here we need to check if selected race is in the array of user's races
+            
+            let enrolled = false;
+
+            for (let i = 0; i < userObject.bets.length; i++){
+                if (selected[0].id === userObject.bets[i].race){
+                    enrolled = true;
+                    break;
+                }
+            }
 
             res.render("races/selectedrace", { race: selected[0], enrolled: enrolled });
             
@@ -196,8 +205,8 @@ app.get('/marketplace', async (req, res) => {
         body: JSON.stringify({})
     }).then(response => {
         response.json().then(function (data) {
-            console.log(data);
             
+            req.flash('success_msg', 'Redirected to Horse Marketplace! Here you can buy horses and then add them to races');
             res.render("marketplace", { foundPlace: data.horses });
 
         }).catch((error) => {
@@ -262,11 +271,12 @@ app.get('/stables', async (req, res) => {
 });
 
 //Go to join race and add a horse
-app.get('/addhorse', async (req, res) => {
+app.get('/addhorse/:id', async (req, res) => {
 
     let sessionId = req.app.locals.sessionid;
+    let userObject = req.app.locals.user;
 
-    await fetch('http://204.48.25.72:8080/functions/me/fetch', {
+    await fetch('http://204.48.25.72:8080/functions/races/fetch', {
         method: "POST",
         headers: {
             "Authorization": sessionId,
@@ -275,14 +285,30 @@ app.get('/addhorse', async (req, res) => {
         body: JSON.stringify({})
     }).then(response => {
         response.json().then(function (data) {
+
+            let selected = data.races.filter(function (el) {
+                return el.id === req.params.id;
+              });
+
+            let raceHorses = selected[0].horses;
+
+            let userHorses = userObject.horses;
+
+            //adding label for user owned horses so we can filter them on the frontend
+            for (let i = 0; i < userHorses.length; i++){
+                for (let j = 0; j < raceHorses.length; j++){
+                    if (userHorses[i]._id === raceHorses[j]._id){
+                        raceHorses[j]["bought"] = true;
+                    }
+                }
+            }
             
-            res.render("horses/addhorse", { horses: data.user.horses });
-            
+            res.render("horses/addhorse", { horses: raceHorses });
+
         }).catch((error) => {
             console.log(error);
         });
     });
-
 });
 
 //sell horse
@@ -300,6 +326,8 @@ app.post('/sellhorse/:id', async (req, res) => {
         body: JSON.stringify({"horseId":horseId})
     }).then(response => {
         response.json().then(function (data) {
+            //updating global user object
+            app.locals.user = data.user;
             req.flash('success_msg', 'Horse sold!');
             res.redirect('/stables');
         }).catch((error) => {
@@ -323,15 +351,17 @@ app.post('/buyhorse/:id', async (req, res) => {
         body: JSON.stringify({"horseId":horseId})
     }).then(response => {
         response.json().then(function (data) {
-            console.log(data.reason);
-            
+
             if (data.reason){
                 req.flash('error_msg', 'The horse you are trying to buy is already in your stable!');
                 res.redirect('/marketplace');
             } else {
+                //updating global user object
+                app.locals.user = data.user;
                 req.flash('success_msg', 'Horse bought!');
                 res.redirect('/stables');
             }
+            
         }).catch((error) => {
             console.log(error);
         });
@@ -369,6 +399,8 @@ app.post('/addbet/:id', async (req, res) => {
                 req.flash('error_msg', 'The race ended already!');
                 res.redirect('/addhorse');
             } else {
+                //updating global user object
+                app.locals.user = data.user;
                 req.flash('success_msg', 'You just made a bet!');
                 res.redirect('/lobby');
             }
@@ -378,7 +410,7 @@ app.post('/addbet/:id', async (req, res) => {
     });
 });
 
-//Go to My Races route
+//Go to My Races route(//TODO: refactor this)
 app.get('/myraces', async (req, res) => {
 
     let sessionId = req.app.locals.sessionid;
@@ -419,7 +451,7 @@ app.get('/myraces', async (req, res) => {
 
 });
 
-//get all races for any league
+//get all races for concrete league
 app.get('/races/:id', async (req, res) => {
 
     let sessionId = req.app.locals.sessionid;
