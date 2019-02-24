@@ -2,25 +2,25 @@
     <div class="container green-4 pt-5">
 
         <div class="up-main-info text-center">
-            <img class="rounded-circle mx-auto d-block mb-3" src="/img/dogie.jpg" alt="64x64" height="200" width="200">
+            <img class="rounded-circle mx-auto d-block mb-3" src="{{foundUser.pictureURL}}" alt="64x64" height="200" width="200">
         </div>
 
         <div class="row pb-5">
 
             <div class="col-sm-12 text-center">
-                <h2 class="up-header">Jason Bourne</h2>
+                <h2 class="up-header"> {{foundUser.firstName}} {{foundUser.lastName}}</h2>
             </div>
 
             <div class="col-6">
                 <div class="el-tablo centered">
-                    <div class="value">{{foundUser.userRaces.length}}</div>
+                    <div class="value">{{foundUser.bets.length}}</div>
                     <div class="label">races</div>
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="el-tablo centered">
-                    <div class="value">$25</div>
+                    <div class="value">${{foundUser.ballance}}</div>
                     <div class="label">CASH</div>
                 </div>
             </div>

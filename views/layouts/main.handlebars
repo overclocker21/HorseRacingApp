@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
     <meta charset="UTF-8">
@@ -14,24 +14,24 @@
         crossorigin="anonymous">
 </head>
 
-<body>
+<body class="d-flex flex-column h-100">
 
     <script>
         window.fbAsyncInit = function () {
             FB.init({
-                appId: '2028693773905353',
+                appId: '978850485622086',
                 cookie: true,
                 xfbml: true,
                 version: 'v3.2'
             });
 
             //enable route protection when production ready
-            //FB.getLoginStatus(function (response) {
+            FB.getLoginStatus(function (response) {
 
-            //    if (response.status === "unknown") {
-            //        document.location.href = "http://localhost:5000";
-            //    }
-            //});
+                if (response.status === "unknown") {
+                    document.location.href = "http://localhost:5000";
+                }
+            });
 
         };
 

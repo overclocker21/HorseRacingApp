@@ -10,34 +10,30 @@
                 <!-- Open Leagues -->
                 <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3">
                     <div class="col p-0">
-                        <h5 class="mt-1 mb-0 ">All Open Leagues</h5>
+                        <h5 class="mt-1 mb-0 ">All Participants</h5>
                     </div>
-                    <div class="col">
-                        <button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/openleagues/add'">ADD
-                        </button></div>
 
 
                 </div>
 
                 <div class="list-group list-group-flush">
 
-                    {{#each open_leagues}}
+                    {{#each league.participants}}
 
-                    <a href="/leaguedetails/{{id}}" class="list-group-item list-group-item-action list-group-item-leagues">
+                    <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
                         <div class="media">
-                            <img src="img/leagues_default_icon.png" class="mr-3" alt="...">
+                            <img src="{{pictureURL}}" class="mr-3" alt="" height="100">
                             <div class="media-body">
                                 <div class="d-flex justify-content-between align-items-center w-100">
-                                    <strong class="text-gray-dark">{{title}}</strong>
+                                    <strong class="text-gray-dark">{{firstName}} {{lastName}}</strong>
                                 </div>
-                                <span class="badge badge-pill badge-leagues mt-3">Racing Competitions</span>
                             </div>
                         </div>
                     </a>
                     {{else}}
                     <div class="list-group mt-1 shadow-sm rounded">
                         <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
-                            <h5 class="text-center noleagues_v2 ">at the moment there are no public leagues</h5>
+                            <h5 class="text-center noleagues_v2 ">At the moment none joined the league</h5>
                         </a>
                     </div>
                     {{/each}}

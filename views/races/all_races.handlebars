@@ -3,10 +3,10 @@
     <div class="container">
 
         <!--<h3 class="text-center mt-3 mb-0 page-title">Races of {{ foundLeague.openTitle }} league</h3>-->
-        <h3 class="text-center mt-3 mb-0 page-title">Enrolled races:</h3>
+        <h3 class="text-center mt-3 mb-0 page-title">Available Races of the league</h3>
         <div class="row pb-5">
 
-            {{#each enrolled_races}}
+            {{#each races}}
 
             <div class="col-xs-6 col-md-12 col-lg-6 mb-3 mt-3">
                 <div class="card card-races green-1 shadow-sm">
@@ -25,22 +25,17 @@
                                 <tr>
                                     <td>{{formatDateInUI date}}</td>
                                     <td>5 / 12</td>
-                                    <td>$50,000</td>
+                                    <td>$10,000</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <button type="button" class="btn btn btn-sm btn-success float-right">Enrolled</button>
+                        <button type="button" class="btn btn btn-sm btn-warning float-right" onclick="window.location.href='/selectedrace/{{id}}'">Select</button>
 
 
                     </div>
                 </div>
             </div>
-            {{else}}
-            <div class="list-group mt-1 shadow-sm rounded mx-auto">
-                <a href="#" class="list-group-item list-group-item-action list-group-item-leagues">
-                    <h5 class="text-center noleagues_v2 ">You are not enrolled in any race currently</h5>
-                </a>
-            </div>
+
             {{/each}}
         </div>
     </div>

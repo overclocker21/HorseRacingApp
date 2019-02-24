@@ -1,0 +1,53 @@
+<main role="main">
+
+    <div class="container pt-3">
+        <h3 class="text-center colheader ">{{league.title}}</h3>
+
+
+
+
+        <div class="row mt-5">
+
+            <div class="col-6">
+                <div class="el-tablo centered">
+                    <div class="value">Starts:</div>
+                    <div class="label">{{formatDateInUI league.startDate}}</div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="el-tablo centered">
+                    <div class="value">Ends:</div>
+                    <div class="label">{{formatDateInUI league.endDate}}</div>
+                </div>
+            </div>
+
+            <!-- Open Leagues -->
+
+            <div class="col-md-6 mt-5 mx-auto">
+
+                <!-- Open Leagues -->
+                <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3">
+                    <div class="col p-0">
+                        <h5 class="mt-1 mb-0 ">Races</h5>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/races/{{league.id}}'">View >
+                        </button></div>
+                </div>
+
+                <div class="row rounded-top mx-0 my-0 pl-3 py-2 green-3 mt-3">
+                    <div class="col p-0">
+                        <h5 class="mt-1 mb-0 ">Participants</h5>
+                    </div>
+                    <div class="col"><button type="button" class="float-right ml-2 btn btn-sm btn-warning " onclick="window.location.href='/participants/{{league.id}}'">View >
+                        </button></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>

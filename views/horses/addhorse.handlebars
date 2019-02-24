@@ -5,10 +5,10 @@
         <h3 class="text-center mt-3 mb-0 page-title">Add Horse </h3>
 
         <div class="row pb-5">
-            {{#each foundUser.userHorses}}
+            {{#each horses}}
             <div class="col-xs-6 col-md-12 col-lg-6 mb-3 mt-3">
                 <div class="card card-races green-1 shadow-sm">
-                    <h5 class="card-header"><i class="fas fa-horse"></i> {{horseName}}</h5>
+                    <h5 class="card-header"><i class="fas fa-horse"></i> {{name}}</h5>
                     <div class="card-body">
                         <table class="table  table-sm mb-0">
                             <thead class="green-2">
@@ -23,7 +23,7 @@
                                 <tr>
                                     <td>4</td>
                                     <td>Female</td>
-                                    <td>$60,000</td>
+                                    <td>${{price}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -42,11 +42,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                        
+                        {{#if bought}}
+                            <form action="/addbet/{{_id}}" method="post">
+                                <input type="submit" name="upvote" value="Add" class="btn btn btn-sm btn-warning float-right" />
+                            </form>
+                        {{else}}
+                            <form action="/marketplace" method="get">
+                                <input type="submit" name="upvote" value="Buy & Add" class="btn btn btn-sm btn-warning float-right" />
+                            </form>
+                        {{/if}}
 
-                        <form action="/addhorse/{{horseName}}/add" method="post">
-                            <input type="submit" name="upvote" value="Add" class="btn btn btn-sm btn-warning float-right" />
-                        </form>
-                        <!-- <button type="submit" class="btn btn btn-sm btn-warning float-right">ADD</button> -->
                     </div>
                 </div>
             </div>

@@ -24,24 +24,34 @@
             <div class="form-row mt-3">
 
                 <div class="form-group col-md-4">
+                </div>
+
+                <div class="form-group col-md-4 text-center">
                     <label for="numOfRaces">Number of races</label>
                     <input type="number" class="league-form" name="numOfRaces" required>
-                </div>
 
-                <div class="form-group col-md-4">
                     <label for="numOfPlayers">Number of players</label>
                     <input type="number" class="league-form" name="numOfPlayers" required>
+
+                    <label for="startDate">Select start date:</label>
+                    <div>
+                        <input class="league-form" type="date" name="startDate" value="2019-01-19" required>
+                    </div>
+
+                    <label for="endDate">Select end date:</label>
+                    <div>
+                        <input class="league-form" type="date" name="endDate" value="2019-01-19" required>
+                    </div>
+
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="numOfHorses">Number of horses</label>
-                    <input type="number" class="league-form" name="numOfHorses" required>
                 </div>
 
             </div>
 
 
-            <div class="form-row mt-3">
+            {{!-- <div class="form-row mt-3">
 
                 <div class="form-group col-md-4">
                     <label for="typeOfHorses">Type of horses</label>
@@ -69,7 +79,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
 
             <p class="text-center mt-3">
 
