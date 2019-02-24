@@ -148,6 +148,53 @@ app.get('/lobby', async (req, res) => {
 
 });
 
+app.get('/leaguedetails/:id', async (req, res) => {
+
+    let sessionId = req.app.locals.sessionid;
+    let leagueId = req.params.id;
+
+    await fetch('http://204.48.25.72:8080/functions/leagues/league/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({"leagueId":leagueId})
+    }).then(response => {
+        response.json().then(function (data) {     
+
+            res.render("leaguedetails", { league: data.league});
+
+        }).catch((error) => {
+            console.log(error);
+        });
+    }); 
+});
+
+app.get('/participants/:id', async (req, res) => {
+
+    let sessionId = req.app.locals.sessionid;
+    let leagueId = req.params.id;
+
+    await fetch('http://204.48.25.72:8080/functions/leagues/league/fetch', {
+        method: "POST",
+        headers: {
+            "Authorization": sessionId,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({"leagueId":leagueId})
+    }).then(response => {
+        response.json().then(function (data) {     
+
+            res.render("participants", { league: data.league});
+
+        }).catch((error) => {
+            console.log(error);
+        });
+    }); 
+});
+
+
 //Go to selected race
 app.get('/selectedrace/:id', async (req, res) => {
 
@@ -361,7 +408,7 @@ app.post('/buyhorse/:id', async (req, res) => {
                 req.flash('success_msg', 'Horse bought!');
                 res.redirect('/stables');
             }
-            
+
         }).catch((error) => {
             console.log(error);
         });
