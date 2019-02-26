@@ -24,34 +24,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each horses}}
+                                {{#each race.horses}}
                                 <tr>
 
-                                    {{#if place}}
-                                    <td class="pl-2">{{place}}</td>
-                                    {{else}}
                                     <td class="pl-2">-</td>
-                                    {{/if}}
 
                                     <td>{{name}}</td>
 
-                                    {{#if (gotGold place)}}
-                                    <td>1</td>
-                                    {{else}}
                                     <td>0</td>
-                                    {{/if}}
+                                    <td>0</td>
+                                    <td>0</td>
 
-                                    {{#if (gotSilver place)}}
-                                    <td>1</td>
-                                    {{else}}
-                                    <td>0</td>
-                                    {{/if}}
-
-                                    {{#if (gotBronze place)}}
-                                    <td>1</td>
-                                    {{else}}
-                                    <td>0</td>
-                                    {{/if}}
                                     <td class="text-right pr-2">-</td>
                                 </tr>
                                 {{/each}}
@@ -60,7 +43,13 @@
                     </div>
                 </div>
 
-                <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">{{status}} </button></p>
+                {{#if enrolled}}
+                <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">ENROLLED </button></p>
+                {{else}}
+                <p class="text-center mt-2"><button type="button" class="btn btn btn-warning "
+                        onclick="window.location.href='/addhorse/{{race.id}}'">JOIN
+                        THE RACE</button></p>
+                {{/if}}
 
             </div>
         </div>

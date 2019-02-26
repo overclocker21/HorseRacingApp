@@ -231,6 +231,7 @@ app.get('/selectedrace/:id', async (req, res) => {
 
             let enrolled = false;
             let ended = false;
+            let status = "";
 
             for (let i = 0; i < userObject.bets.length; i++) {
                 if (selected[0].id === userObject.bets[i].race) {
@@ -256,10 +257,16 @@ app.get('/selectedrace/:id', async (req, res) => {
                     }
                 }
 
-                res.render("races/selectedrace", { race: selected[0], enrolled: enrolled, ended: ended, horses: statsArray });
+                if (enrolled && ended) {
+                    status = "You were enrolled and it ended"
+                } else {
+                    status = "Race ended"
+                }
+
+                res.render("races/selectedrace", { race: selected[0], status: status, horses: statsArray });
 
             } else {
-                res.render("races/selectedrace", { race: selected[0], enrolled: enrolled });
+                res.render("races/selectedrace_notstarted", { race: selected[0], enrolled: enrolled });
             }
 
         }).catch((error) => {
@@ -709,7 +716,7 @@ app.post('/privateleagues', (req, res) => {
 
 });
 
-//Starting server and listening to port 5000
+//Starting server and listening to port 80
 const port = 80;
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
