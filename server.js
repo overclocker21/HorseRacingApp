@@ -19,6 +19,15 @@ app.engine('handlebars', exphbs({
     helpers: {
         formatDateInUI: function (date) {
             return dateFormat(date, "mmmm dS, yyyy");
+        },
+        gotGold: function (place) {
+            if (place === 1) return true;
+        },
+        gotSilver: function (place) {
+            if (place === 2) return true;
+        },
+        gotBronze: function (place) {
+            if (place === 3) return true;
         }
     }
 }));
@@ -221,6 +230,7 @@ app.get('/selectedrace/:id', async (req, res) => {
             //here we need to check if selected race is in the array of user's races
 
             let enrolled = false;
+            let ended = false;
 
             for (let i = 0; i < userObject.bets.length; i++) {
                 if (selected[0].id === userObject.bets[i].race) {
@@ -229,7 +239,28 @@ app.get('/selectedrace/:id', async (req, res) => {
                 }
             }
 
-            res.render("races/selectedrace", { race: selected[0], enrolled: enrolled });
+            let statsArray = selected[0].stats;
+            let horsesArray = selected[0].horses;
+
+            if (statsArray.length > 0) {
+                console.log("There are some stats in it");
+
+                ended = true;
+
+                for (let i = 0; i < statsArray.length; i++) {
+                    for (let j = 0; j < horsesArray.length; j++) {
+                        if (statsArray[i].horse === horsesArray[j]._id) {
+                            statsArray[i]['name'] = horsesArray[j].name;
+                            continue;
+                        }
+                    }
+                }
+
+                res.render("races/selectedrace", { race: selected[0], enrolled: enrolled, ended: ended, horses: statsArray });
+
+            } else {
+                res.render("races/selectedrace", { race: selected[0], enrolled: enrolled });
+            }
 
         }).catch((error) => {
             console.log(error);
@@ -612,7 +643,7 @@ app.post('/openleagues', async (req, res) => {
         "isPrivate": false
     };
 
-    fetch('http://204.48.25.72:8080/functions/leagues/create', {
+    await fetch('http://204.48.25.72:8080/functions/leagues/create', {
         method: "POST",
         headers: {
             "Authorization": sessionId,

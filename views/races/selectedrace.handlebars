@@ -14,20 +14,44 @@
                                 <tr>
                                     <th scope="col"><span class="cr-title ml-2">RANK</span></th>
                                     <th scope="col"><span class="cr-title">NAME</span></th>
-                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy gold"></i></span></th>
-                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy bronze"></i></span></th>
-                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy silver"></i></span></th>
+                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy gold"></i></span>
+                                    </th>
+                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy bronze"></i></span>
+                                    </th>
+                                    <th scope="col"><span class="cr-title"><i class="fas fa-trophy silver"></i></span>
+                                    </th>
                                     <th scope="col"><span class="cr-title float-right mr-2">Money total</span></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{#each race.horses}}
+                                {{#each horses}}
                                 <tr>
-                                    <td class="pl-2">?</td>
+
+                                    {{#if place}}
+                                    <td class="pl-2">{{place}}</td>
+                                    {{else}}
+                                    <td class="pl-2">-</td>
+                                    {{/if}}
+
                                     <td>{{name}}</td>
+
+                                    {{#if (gotGold place)}}
+                                    <td>1</td>
+                                    {{else}}
                                     <td>0</td>
+                                    {{/if}}
+
+                                    {{#if (gotSilver place)}}
+                                    <td>1</td>
+                                    {{else}}
                                     <td>0</td>
+                                    {{/if}}
+
+                                    {{#if (gotBronze place)}}
+                                    <td>1</td>
+                                    {{else}}
                                     <td>0</td>
+                                    {{/if}}
                                     <td class="text-right pr-2">-</td>
                                 </tr>
                                 {{/each}}
@@ -37,10 +61,18 @@
                 </div>
 
                 {{#if enrolled}}
-                    <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">ENROLLED </button></p>
+                <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">ENROLLED </button></p>
                 {{else}}
-                    <p class="text-center mt-2"><button type="button" class="btn btn btn-warning " onclick="window.location.href='/addhorse/{{race.id}}'">JOIN
+
+                {{#if ended}}
+                <p class="text-center mt-2"><button type="button" class="btn btn btn-success ">This Race Ended </button>
+                </p>
+                {{else}}
+                <p class="text-center mt-2"><button type="button" class="btn btn btn-warning "
+                        onclick="window.location.href='/addhorse/{{race.id}}'">JOIN
                         THE RACE</button></p>
+                {{/if}}
+
                 {{/if}}
 
             </div>
